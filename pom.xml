@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.github.luchbheag</groupId>
 	<artifactId>livejournal-telegrambot</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.1-SNAPSHOT</version>
 	<name>LiveJournal Telegram Bot</name>
-	<description>Teleram bot that sends notifications about new posts in selected LiveJournal blogs</description>
+	<description>Telegram bot that sends notifications about new posts in selected LiveJournal blogs</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -28,6 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<telegrambot.starter.version>5.7.1</telegrambot.starter.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -40,6 +41,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+	<dependency>
+		<groupId>org.telegram</groupId>
+		<artifactId>telegrambots-spring-boot-starter</artifactId>
+		<version>${telegrambot.starter.version}</version>
+	</dependency>
 	</dependencies>
 
 	<build>
