@@ -2,10 +2,23 @@ version: '3.1'
 
 services:
   livejournal-telegrambot:
+    depends_on:
+      - telegrambot-db
     build:
       context: .
     env_file:
       - ./.env/livejournal-telegrambot.env
-#      - BOT_NAME=${BOT_NAME}
-#      - BOT_TOKEN=${BOT_TOKEN}
+# TODO: add username and password in .env file and write it in README
     restart: always
+  telegrambot-db:
+    image: mysql:8.0.32
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'telegrambot_db'
+      MYSQL_USER: 'telegrambot_db_user'
+      MYSQL_PASSWORD: 'telegrambot_db_password'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - "3307:3306"
+    expose:
+      - '3307'

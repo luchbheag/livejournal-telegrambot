@@ -3,6 +3,7 @@ package com.github.luchbheag.livejournal_telegrambot.command;
 import com.github.luchbheag.livejournal_telegrambot.bot.LiveJournalTelegramBot;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageService;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageServiceImpl;
+import com.github.luchbheag.livejournal_telegrambot.service.TelegramUserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -16,6 +17,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 abstract class AbstractCommandTest {
 
     protected LiveJournalTelegramBot liveJournalBot = Mockito.mock(LiveJournalTelegramBot.class);
+    protected TelegramUserService telegramUserService = Mockito.mock(TelegramUserService.class);
     protected SendBotMessageService sendBotMessageService = new SendBotMessageServiceImpl(liveJournalBot);
 
     abstract String getCommandName();
