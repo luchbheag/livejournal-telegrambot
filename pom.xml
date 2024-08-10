@@ -30,7 +30,7 @@
 		<java.version>17</java.version>
 		<telegrambot.starter.version>5.7.1</telegrambot.starter.version>
 		<mysql-connector.version>8.0.33</mysql-connector.version>
-		<flyway.version>10.17.0</flyway.version>
+		<flyway.version>8.5.13</flyway.version>
 	</properties>
 	<dependencies>
 		<dependency>

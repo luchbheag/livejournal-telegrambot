@@ -8,7 +8,8 @@ services:
       context: .
     env_file:
       - ./.env/livejournal-telegrambot.env
-# TODO: add username and password in .env file and write it in README
+# TODO: add username and password in .env file
+# TODO: add instruction in README
     restart: always
   telegrambot-db:
     image: mysql:8.0.32
