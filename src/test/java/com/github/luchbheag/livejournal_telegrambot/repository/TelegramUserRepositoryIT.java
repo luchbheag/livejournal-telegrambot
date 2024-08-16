@@ -16,38 +16,37 @@ import java.util.Optional;
 /**
  * Integration-level testing for {@link TelegramUserRepository}.
  */
-// TODO
-//@ActiveProfiles("test")
-//@DataJpaTest
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("test")
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class TelegramUserRepositoryIT {
-//    @Autowired
-//    private TelegramUserRepository telegramUserRepository;
-//
-//    @Sql(scripts = {"/sql/clearDbs.sql", "/sql/telegram_users.sql"})
-//    @Test
-//    public void shouldProperlyFindAllActiveUsers() {
-//        // when
-//        List<TelegramUser> users = telegramUserRepository.findAllByActiveTrue();
-//
-//        // then
-//        Assertions.assertEquals(5, users.size());
-//    }
-//
-//    @Sql(scripts = {"/sql/clearDbs.sql"})
-//    @Test
-//    public void shouldProperlySaveTelegramUser() {
-//        // given
-//        TelegramUser telegramUser = new TelegramUser();
-//        telegramUser.setChatId("1234567890");
-//        telegramUser.setActive(true);
-//        telegramUserRepository.save(telegramUser);
-//
-//        // when
-//        Optional<TelegramUser> saved = telegramUserRepository.findById(telegramUser.getChatId());
-//
-//        // then
-//        Assertions.assertTrue(saved.isPresent());
-//        Assertions.assertEquals(telegramUser, saved.get());
-//    }
+    @Autowired
+    private TelegramUserRepository telegramUserRepository;
+
+    @Sql(scripts = {"/sql/clearDbs.sql", "/sql/telegram_users.sql"})
+    @Test
+    public void shouldProperlyFindAllActiveUsers() {
+        // when
+        List<TelegramUser> users = telegramUserRepository.findAllByActiveTrue();
+
+        // then
+        Assertions.assertEquals(5, users.size());
+    }
+
+    @Sql(scripts = {"/sql/clearDbs.sql"})
+    @Test
+    public void shouldProperlySaveTelegramUser() {
+        // given
+        TelegramUser telegramUser = new TelegramUser();
+        telegramUser.setChatId("1234567890");
+        telegramUser.setActive(true);
+        telegramUserRepository.save(telegramUser);
+
+        // when
+        Optional<TelegramUser> saved = telegramUserRepository.findById(telegramUser.getChatId());
+
+        // then
+        Assertions.assertTrue(saved.isPresent());
+        Assertions.assertEquals(telegramUser, saved.get());
+    }
 }
