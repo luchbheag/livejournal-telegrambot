@@ -31,6 +31,8 @@
 		<telegrambot.starter.version>5.7.1</telegrambot.starter.version>
 		<mysql-connector.version>8.0.33</mysql-connector.version>
 		<flyway.version>10.17.1</flyway.version>
+		<jsoup.version>1.17.2</jsoup.version>
+		<apache-commons-lang3.version>3.14.0</apache-commons-lang3.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -90,6 +92,20 @@
 			<artifactId>maven-surefire-plugin</artifactId>
 			<version>3.3.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>${jsoup.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${apache-commons-lang3.version}</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>

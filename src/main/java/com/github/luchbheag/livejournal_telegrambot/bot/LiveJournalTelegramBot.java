@@ -1,6 +1,10 @@
 package com.github.luchbheag.livejournal_telegrambot.bot;
 
 import com.github.luchbheag.livejournal_telegrambot.command.CommandContainer;
+import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParser;
+import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParserImpl;
+import com.github.luchbheag.livejournal_telegrambot.service.BlogSubService;
+import com.github.luchbheag.livejournal_telegrambot.service.BlogSubServiceImpl;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageServiceImpl;
 import com.github.luchbheag.livejournal_telegrambot.service.TelegramUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +34,13 @@ public class LiveJournalTelegramBot extends TelegramLongPollingBot {
     private final CommandContainer commandContainer;
 
     @Autowired
-    public LiveJournalTelegramBot(TelegramUserService telegramUserService) {
-        this.commandContainer = new CommandContainer(new SendBotMessageServiceImpl(this), telegramUserService);
+    public LiveJournalTelegramBot(TelegramUserService telegramUserService,
+                                  BlogSubService blogSubService,
+                                  LivejournalParser livejournalParser) {
+        this.commandContainer = new CommandContainer(new SendBotMessageServiceImpl(this),
+                telegramUserService,
+                blogSubService,
+                livejournalParser);
     }
 
     @Override
