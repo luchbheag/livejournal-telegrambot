@@ -1,5 +1,7 @@
 package com.github.luchbheag.livejournal_telegrambot.command;
 
+import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParser;
+import com.github.luchbheag.livejournal_telegrambot.service.BlogSubService;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageService;
 import com.github.luchbheag.livejournal_telegrambot.service.TelegramUserService;
 import org.junit.jupiter.api.Assertions;
@@ -19,7 +21,10 @@ public class CommandContainerTest {
     public void init() {
         SendBotMessageService sendBotMessageService = Mockito.mock(SendBotMessageService.class);
         TelegramUserService telegramUserService = Mockito.mock(TelegramUserService.class);
-        commandContainer = new CommandContainer(sendBotMessageService, telegramUserService);
+        BlogSubService blosubService = Mockito.mock(BlogSubService.class);
+        LivejournalParser livejournalParser = Mockito.mock(LivejournalParser.class);
+        commandContainer = new CommandContainer(sendBotMessageService, telegramUserService,
+                blosubService, livejournalParser);
     }
 
     @Test

@@ -61,7 +61,7 @@ public class TelegramUserRepositoryIT {
         List<BlogSub> blogSubs = userFromDB.get().getBlogSubs();
         for (int i = 0; i < blogSubs.size(); i++) {
             Assertions.assertEquals(String.format("b%s", +1), blogSubs.get(i).getId());
-            Assertions.assertEquals(i + 1, blogSubs.get(i).getArticleId());
+            Assertions.assertEquals(String.valueOf(i + 1), blogSubs.get(i).getId());
         }
     }
 }
