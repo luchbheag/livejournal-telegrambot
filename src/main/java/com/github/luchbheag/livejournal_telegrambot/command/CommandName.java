@@ -8,7 +8,8 @@ public enum CommandName {
     STOP("/stop"),
     HELP("/help"),
     STAT("/stat"),
-    NO("nocommand");
+    NO("nocommand"),
+    ADD_BLOG_SUB("/addblogsub");
 
     private final String commandName;
 

@@ -1,10 +1,12 @@
 package com.github.luchbheag.livejournal_telegrambot.repository.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Objects.isNull;
 
 
 /**
@@ -14,11 +16,20 @@ import lombok.Data;
 @Entity
 @Table(name = "tg_user")
 public class TelegramUser {
-
     @Id
     @Column(name = "chat_id")
     private String chatId;
 
     @Column(name = "active")
     private boolean active;
+
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    private List<BlogSub> blogSubs;
+
+    public void addBlogSub(BlogSub blogSub) {
+        if (isNull(blogSubs)) {
+            blogSubs = new ArrayList<>();
+        }
+        blogSubs.add(blogSub);
+    }
 }
