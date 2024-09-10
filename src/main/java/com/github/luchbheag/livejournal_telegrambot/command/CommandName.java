@@ -9,7 +9,8 @@ public enum CommandName {
     HELP("/help"),
     STAT("/stat"),
     NO("nocommand"),
-    ADD_BLOG_SUB("/addblogsub");
+    ADD_BLOG_SUB("/addblogsub"),
+    LIST_BLOG_SUB("/listblogsub");
 
     private final String commandName;
 

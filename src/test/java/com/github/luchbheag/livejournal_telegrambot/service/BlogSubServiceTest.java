@@ -2,6 +2,7 @@ package com.github.luchbheag.livejournal_telegrambot.service;
 
 import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParser;
 import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParserImpl;
+import com.github.luchbheag.livejournal_telegrambot.repository.ArticlePreviewRepository;
 import com.github.luchbheag.livejournal_telegrambot.repository.BlogSubRepository;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.ArticlePreview;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
@@ -29,7 +30,9 @@ public class BlogSubServiceTest {
         TelegramUserService telegramUserService = Mockito.mock(TelegramUserService.class);
         blogSubRepository = Mockito.mock(BlogSubRepository.class);
         LivejournalParser livejournalParser = Mockito.mock(LivejournalParser.class);
-        blogSubService = new BlogSubServiceImpl(blogSubRepository, telegramUserService, livejournalParser);
+        ArticlePreviewRepository articlePreviewRepository = Mockito.mock(ArticlePreviewRepository.class);
+        blogSubService = new BlogSubServiceImpl(blogSubRepository, telegramUserService,
+                livejournalParser, articlePreviewRepository);
 
         testUser = new TelegramUser();
         testUser.setChatId(CHAT_ID);
