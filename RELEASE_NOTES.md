@@ -12,4 +12,4 @@
 ## 0.1.0-SHAPSHOT
 
 * added stub telegram bot
-* added SpringBoot skeletn project
+* added SpringBoot skeleton project

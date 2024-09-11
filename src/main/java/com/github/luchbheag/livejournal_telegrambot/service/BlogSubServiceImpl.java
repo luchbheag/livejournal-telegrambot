@@ -2,6 +2,7 @@ package com.github.luchbheag.livejournal_telegrambot.service;
 
 import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParser;
 import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParserImpl;
+import com.github.luchbheag.livejournal_telegrambot.repository.ArticlePreviewRepository;
 import com.github.luchbheag.livejournal_telegrambot.repository.BlogSubRepository;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.ArticlePreview;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
@@ -19,14 +20,17 @@ public class BlogSubServiceImpl implements BlogSubService {
     private final BlogSubRepository blogSubRepository;
     private final TelegramUserService telegramUserService;
     private final LivejournalParser livejournalParser;
+    private final ArticlePreviewRepository articlePreviewRepository;
 
     @Autowired
     public BlogSubServiceImpl(BlogSubRepository blogSubRepository,
                               TelegramUserService telegramUserService,
-                              LivejournalParser livejournalParser) {
+                              LivejournalParser livejournalParser,
+                              ArticlePreviewRepository articlePreviewRepository) {
         this.blogSubRepository = blogSubRepository;
         this.telegramUserService = telegramUserService;
         this.livejournalParser = livejournalParser;
+        this.articlePreviewRepository = articlePreviewRepository;
     }
 
     @Override
@@ -50,6 +54,7 @@ public class BlogSubServiceImpl implements BlogSubService {
             blogSub.setId(blogName);
             ArticlePreview articlePreview = livejournalParser.getFirstArticlePreview(blogName);
             // here I should save this thing in DB as well, I guess. OR DOES IT WORK BY ITSELF?
+            articlePreviewRepository.save(articlePreview);
             blogSub.setArticlePreview(articlePreview);
         }
         return blogSubRepository.save(blogSub);
