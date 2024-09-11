@@ -48,7 +48,7 @@ public class ListBlogSubCommandTest {
         Mockito.when(message.getText()).thenReturn(LIST_BLOG_SUB.getCommandName());
         update.setMessage(message);
 
-        String collectedBlogs = "I've found all your blog subscribtions:\n\n" +
+        String collectedBlogs = "I've found all your blog subscriptions:\n\n" +
                 telegramUser.getBlogSubs().stream()
                         .map(it -> String.format("Blog: %s (https://%s.livejournal.com)\n", it.getId(), it.getId()))
                         .collect(Collectors.joining());
