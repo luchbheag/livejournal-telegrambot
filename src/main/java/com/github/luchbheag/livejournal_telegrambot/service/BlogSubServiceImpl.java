@@ -59,4 +59,14 @@ public class BlogSubServiceImpl implements BlogSubService {
         }
         return blogSubRepository.save(blogSub);
     }
+
+    @Override
+    public BlogSub save(BlogSub blogSub) {
+        return blogSubRepository.save(blogSub);
+    }
+
+    @Override
+    public Optional<BlogSub> findById(String id) {
+        return blogSubRepository.findById(id);
+    }
 }
