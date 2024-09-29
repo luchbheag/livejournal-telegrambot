@@ -24,6 +24,7 @@ public class CommandContainer {
                 .put(STAT.getCommandName(), new StatCommand(sendBotMessageService, telegramUserService))
                 .put(ADD_BLOG_SUB.getCommandName(), new AddBlogSubCommand(sendBotMessageService, livejournalParser, blogSubService))
                 .put(LIST_BLOG_SUB.getCommandName(), new ListBlogSubCommand(sendBotMessageService, telegramUserService))
+                .put(DELETE_BLOG_SUB.getCommandName(), new DeleteBlogSubCommand(sendBotMessageService, telegramUserService, blogSubService))
                 .build();
 
         unknownCommand = new UnknownCommand(sendBotMessageService);
