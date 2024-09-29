@@ -69,4 +69,10 @@ public class BlogSubServiceImpl implements BlogSubService {
     public Optional<BlogSub> findById(String id) {
         return blogSubRepository.findById(id);
     }
+
+    @Override
+    public void delete(String id) {
+        blogSubRepository.deleteById(id);
+        System.out.println("END");
+    }
 }

@@ -15,4 +15,6 @@ public interface BlogSubService {
     BlogSub save(BlogSub blogSub);
 
     Optional<BlogSub> findById(String id);
+
+    void delete(String id);
 }

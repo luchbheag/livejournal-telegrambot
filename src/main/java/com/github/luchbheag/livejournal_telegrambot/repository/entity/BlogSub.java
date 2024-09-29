@@ -21,7 +21,8 @@ public class BlogSub {
     @Column(name = "id")
     private String id;
 
-    @OneToOne
+    //, orphanRemoval = true
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "last_article_id")
     private ArticlePreview articlePreview;
 
