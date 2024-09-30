@@ -14,12 +14,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: make it a component so it can be autowired
+// TODO: check getters and setters
 @Getter
 @Setter
 @Component
 public class LivejournalParserImpl implements LivejournalParser {
-    private int limit;
+    private int limit = 10;
 
     @Override
     public ArticlePreview getFirstArticlePreview(String journalName) throws HttpStatusException {
