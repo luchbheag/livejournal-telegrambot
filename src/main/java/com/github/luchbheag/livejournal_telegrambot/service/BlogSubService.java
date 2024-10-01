@@ -4,6 +4,7 @@ import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
 import jakarta.ws.rs.NotFoundException;
 import org.jsoup.HttpStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -15,6 +16,8 @@ public interface BlogSubService {
     BlogSub save(BlogSub blogSub);
 
     Optional<BlogSub> findById(String id);
+
+    List<BlogSub> findAll();
 
     void delete(String id);
 }

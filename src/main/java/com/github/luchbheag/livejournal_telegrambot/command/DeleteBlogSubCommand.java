@@ -51,9 +51,7 @@ public class DeleteBlogSubCommand implements Command {
                 wasSubscribed = blogSub.getUsers().remove(telegramUser);
                 if (wasSubscribed) {
                     if (blogSub.getUsers().isEmpty()) {
-                        System.out.println("HERE");
                         blogSubService.delete(blogId);
-                        System.out.println("THERE");
                     } else {
                         blogSubService.save(blogSub);
                     }

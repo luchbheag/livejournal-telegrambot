@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.List;
+
 /**
  * Implementation of {@link SendBotMessageService} interface.
  */
@@ -32,5 +34,13 @@ public class SendBotMessageServiceImpl implements SendBotMessageService {
             // TODO add logging to the project.
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void sendMessages(String chatId, List<String> messages) {
+        if (messages.isEmpty()) {
+            return;
+        }
+        messages.forEach(message -> sendMessage(chatId, message));
     }
 }
