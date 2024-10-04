@@ -1,10 +1,7 @@
 package com.github.luchbheag.livejournal_telegrambot.service;
 
 import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParser;
-import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParserImpl;
-import com.github.luchbheag.livejournal_telegrambot.repository.ArticlePreviewRepository;
 import com.github.luchbheag.livejournal_telegrambot.repository.BlogSubRepository;
-import com.github.luchbheag.livejournal_telegrambot.repository.entity.ArticlePreview;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.TelegramUser;
 import jakarta.ws.rs.NotFoundException;
@@ -30,9 +27,8 @@ public class BlogSubServiceTest {
         TelegramUserService telegramUserService = Mockito.mock(TelegramUserService.class);
         blogSubRepository = Mockito.mock(BlogSubRepository.class);
         LivejournalParser livejournalParser = Mockito.mock(LivejournalParser.class);
-        ArticlePreviewRepository articlePreviewRepository = Mockito.mock(ArticlePreviewRepository.class);
         blogSubService = new BlogSubServiceImpl(blogSubRepository, telegramUserService,
-                livejournalParser, articlePreviewRepository);
+                livejournalParser);
 
         testUser = new TelegramUser();
         testUser.setChatId(CHAT_ID);
@@ -40,9 +36,8 @@ public class BlogSubServiceTest {
 
         Mockito.when(telegramUserService.findByChatId(CHAT_ID))
                 .thenReturn(Optional.of(testUser));
-        Mockito.when(livejournalParser.getFirstArticlePreview("1"))
-                .thenReturn(new ArticlePreview(1, "Main header",
-                        "Sub header", "tet", "http://link.com"));
+        Mockito.when(livejournalParser.getLastArticleId("1"))
+                .thenReturn(1);
     }
     // TODO
 //    @Test

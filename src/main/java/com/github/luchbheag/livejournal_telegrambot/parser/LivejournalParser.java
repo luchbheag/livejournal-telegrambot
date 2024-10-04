@@ -1,8 +1,6 @@
 package com.github.luchbheag.livejournal_telegrambot.parser;
 
-import com.github.luchbheag.livejournal_telegrambot.repository.entity.ArticlePreview;
-import lombok.Getter;
-import lombok.Setter;
+import com.github.luchbheag.livejournal_telegrambot.parser.dto.ArticlePreview;
 import org.jsoup.HttpStatusException;
 
 import java.util.List;
@@ -13,7 +11,7 @@ import java.util.List;
 public interface LivejournalParser {
 
     // TODO: refactor journalName to blogName
-    public ArticlePreview getFirstArticlePreview(String journalName) throws HttpStatusException;
+    public int getLastArticleId(String journalName) throws HttpStatusException;
 
     public List<ArticlePreview> getAllArticlePreviewsSinceId(String journalName, int id);
 

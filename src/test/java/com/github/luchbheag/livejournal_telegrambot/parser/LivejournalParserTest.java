@@ -1,6 +1,6 @@
 package com.github.luchbheag.livejournal_telegrambot.parser;
 
-import com.github.luchbheag.livejournal_telegrambot.repository.entity.ArticlePreview;
+import com.github.luchbheag.livejournal_telegrambot.parser.dto.ArticlePreview;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

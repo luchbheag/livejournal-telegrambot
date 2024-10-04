@@ -15,16 +15,14 @@ import static java.util.Objects.isNull;
 @Entity
 @Table(name = "blog_sub")
 @EqualsAndHashCode
+@Setter
 @Getter
 public class BlogSub {
     @Id
     @Column(name = "id")
     private String id;
 
-    //, orphanRemoval = true
-    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JoinColumn(name = "last_article_id")
-    private ArticlePreview articlePreview;
+    private int lastArticleId;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
