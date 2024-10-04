@@ -12,6 +12,7 @@ import org.jsoup.HttpStatusException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -71,8 +72,12 @@ public class BlogSubServiceImpl implements BlogSubService {
     }
 
     @Override
+    public List<BlogSub> findAll() {
+        return blogSubRepository.findAll();
+    }
+
+    @Override
     public void delete(String id) {
         blogSubRepository.deleteById(id);
-        System.out.println("END");
     }
 }

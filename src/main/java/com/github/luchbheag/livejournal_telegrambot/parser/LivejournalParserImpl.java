@@ -27,7 +27,17 @@ public class LivejournalParserImpl implements LivejournalParser {
         // TODO: try to get this without list, just by one select (except settings)
         try {
             String stringUrl = String.format("https://%s.livejournal.com/", journalName);
-            articlePreview = getAllArticlePreviewsFromPageSinceId(stringUrl, 0, 1).get(0);
+            List<ArticlePreview> listWithFirstArticlePreview = getAllArticlePreviewsFromPageSinceId(stringUrl, 0, 1);
+            if (listWithFirstArticlePreview.isEmpty()) {
+                articlePreview = new ArticlePreview();
+                articlePreview.setId(0);
+                articlePreview.setMainHeader("");
+                articlePreview.setSubHeader("");
+                articlePreview.setText("");
+                articlePreview.setLink("");
+            } else {
+                articlePreview = listWithFirstArticlePreview.get(0);
+            }
         } catch (HttpStatusException httpException) {
             // no such a page, should be thrown futher
             httpException.printStackTrace();
@@ -79,7 +89,7 @@ public class LivejournalParserImpl implements LivejournalParser {
     private ArticlePreview getArticlePreviewFromElement(Element element) {
         int id = Integer.parseInt(element.id().split("-")[2]);
         Elements h2 = element.select("h2");
-        String mainHeader = h2.first().text();
+        String mainHeader = h2.isEmpty() ? "Без заголовка" : h2.first().text();
         String subHeader = h2.size() == 1 ? "" : h2.get(1).text();
         String link = element.select("a.subj-link").attr("href");
         // TODO do date element

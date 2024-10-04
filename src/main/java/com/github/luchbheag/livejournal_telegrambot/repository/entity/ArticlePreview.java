@@ -12,7 +12,6 @@ import java.util.List;
 import static java.util.Objects.isNull;
 
 // TODO rename class OR table in db for match
-// TODO split ArticlePreview and GroupSub
 @Data
 @Entity
 @Table(name = "article_previews")
@@ -20,7 +19,9 @@ import static java.util.Objects.isNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArticlePreview {
-    // TODO: I don't need to store all of that as the link contains ID. Let's think about it.
+    /* TODO: Store only articleId and BlogName (header, subheader and first piece of text can be took from that.
+       TODO: And you can also get list of ArticlePreviews, but save only last one in DB
+     */
     @Id
     @Column(name = "id")
     private int id;
