@@ -72,8 +72,6 @@ public class LivejournalParserImpl implements LivejournalParser {
 
     private List<ArticlePreview> getAllArticlePreviewsFromPageSinceId(String stringUrl, int id, int limit) throws HttpStatusException, IOException {
         Document doc = Jsoup.connect(stringUrl).get();
-        System.out.println(doc);
-        System.out.println("***");
         Elements elements = doc.select("div.post-asset");
         List<ArticlePreview> articlePreviews = new ArrayList<>();
         for (Element element : elements) {
@@ -85,13 +83,11 @@ public class LivejournalParserImpl implements LivejournalParser {
                 articlePreviews.add(articlePreview);
             }
         }
-        System.out.println(articlePreviews.size());
         return articlePreviews;
     }
 
     private ArticlePreview getArticlePreviewFromElement(Element element) {
         int id = Integer.parseInt(element.id().split("-")[2]);
-        System.out.println("ID is " + id);
         Elements h2 = element.select("h2");
         String mainHeader = h2.isEmpty() ? "Без заголовка" : h2.first().text();
         String subHeader = h2.size() == 1 ? "" : h2.get(1).text();
