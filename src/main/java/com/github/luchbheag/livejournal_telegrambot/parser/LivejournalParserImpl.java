@@ -1,6 +1,6 @@
 package com.github.luchbheag.livejournal_telegrambot.parser;
 
-import com.github.luchbheag.livejournal_telegrambot.repository.entity.ArticlePreview;
+import com.github.luchbheag.livejournal_telegrambot.parser.dto.ArticlePreview;
 import lombok.Getter;
 import lombok.Setter;
 import org.jsoup.HttpStatusException;
@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: check getters and setters
 @Getter
 @Setter
 @Component
@@ -22,7 +21,7 @@ public class LivejournalParserImpl implements LivejournalParser {
     private int limit = 10;
 
     @Override
-    public ArticlePreview getFirstArticlePreview(String journalName) throws HttpStatusException {
+    public int getLastArticleId(String journalName) throws HttpStatusException {
         ArticlePreview articlePreview = null;
         // TODO: try to get this without list, just by one select (except settings)
         try {
@@ -46,7 +45,7 @@ public class LivejournalParserImpl implements LivejournalParser {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
-        return articlePreview;
+        return articlePreview != null ? articlePreview.getId() : 0;
     }
 
     @Override

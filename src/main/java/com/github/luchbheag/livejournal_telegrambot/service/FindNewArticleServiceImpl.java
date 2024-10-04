@@ -1,7 +1,7 @@
 package com.github.luchbheag.livejournal_telegrambot.service;
 
 import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParser;
-import com.github.luchbheag.livejournal_telegrambot.repository.entity.ArticlePreview;
+import com.github.luchbheag.livejournal_telegrambot.parser.dto.ArticlePreview;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.TelegramUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class FindNewArticleServiceImpl implements FindNewArticleService {
     @Override
     public void finNewArticles() {
         blogSubService.findAll().forEach(blogSub -> {
-            List<ArticlePreview> newArticles = livejournalParser.getAllArticlePreviewsSinceId(blogSub.getId(), blogSub.getArticlePreview().getId());
+            List<ArticlePreview> newArticles = livejournalParser.getAllArticlePreviewsSinceId(blogSub.getId(), blogSub.getLastArticleId());
             setNewArticlePreview(blogSub, newArticles);
             notifySubscribersAboutNewArticles(blogSub, newArticles);
         });
@@ -54,7 +54,7 @@ public class FindNewArticleServiceImpl implements FindNewArticleService {
 
     private void setNewArticlePreview(BlogSub blogSub, List<ArticlePreview> newArticles) {
         if (!newArticles.isEmpty()) {
-            blogSub.setArticlePreview(newArticles.get(0));
+            blogSub.setLastArticleId(newArticles.get(0).getId());
         }
     }
 

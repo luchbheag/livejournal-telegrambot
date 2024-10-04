@@ -1,10 +1,7 @@
 package com.github.luchbheag.livejournal_telegrambot.service;
 
 import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParser;
-import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParserImpl;
-import com.github.luchbheag.livejournal_telegrambot.repository.ArticlePreviewRepository;
 import com.github.luchbheag.livejournal_telegrambot.repository.BlogSubRepository;
-import com.github.luchbheag.livejournal_telegrambot.repository.entity.ArticlePreview;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.TelegramUser;
 import jakarta.ws.rs.NotFoundException;
@@ -21,17 +18,14 @@ public class BlogSubServiceImpl implements BlogSubService {
     private final BlogSubRepository blogSubRepository;
     private final TelegramUserService telegramUserService;
     private final LivejournalParser livejournalParser;
-    private final ArticlePreviewRepository articlePreviewRepository;
 
     @Autowired
     public BlogSubServiceImpl(BlogSubRepository blogSubRepository,
                               TelegramUserService telegramUserService,
-                              LivejournalParser livejournalParser,
-                              ArticlePreviewRepository articlePreviewRepository) {
+                              LivejournalParser livejournalParser) {
         this.blogSubRepository = blogSubRepository;
         this.telegramUserService = telegramUserService;
         this.livejournalParser = livejournalParser;
-        this.articlePreviewRepository = articlePreviewRepository;
     }
 
     @Override
@@ -53,10 +47,8 @@ public class BlogSubServiceImpl implements BlogSubService {
             // what if there is no such a blog
             blogSub.addUser(telegramUser);
             blogSub.setId(blogName);
-            ArticlePreview articlePreview = livejournalParser.getFirstArticlePreview(blogName);
-            // here I should save this thing in DB as well, I guess. OR DOES IT WORK BY ITSELF?
-            articlePreviewRepository.save(articlePreview);
-            blogSub.setArticlePreview(articlePreview);
+            int lastArticleId = livejournalParser.getLastArticleId(blogName);
+            blogSub.setLastArticleId(lastArticleId);
         }
         return blogSubRepository.save(blogSub);
     }

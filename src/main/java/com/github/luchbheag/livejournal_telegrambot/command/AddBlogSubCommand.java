@@ -1,11 +1,9 @@
 package com.github.luchbheag.livejournal_telegrambot.command;
 
 import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParser;
-import com.github.luchbheag.livejournal_telegrambot.repository.entity.ArticlePreview;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
 import com.github.luchbheag.livejournal_telegrambot.service.BlogSubService;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageService;
-import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageServiceImpl;
 import jakarta.ws.rs.NotFoundException;
 import org.jsoup.HttpStatusException;
 import org.telegram.telegrambots.meta.api.objects.Update;
