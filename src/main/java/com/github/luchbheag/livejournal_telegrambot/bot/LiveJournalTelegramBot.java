@@ -15,6 +15,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.List;
+
 import static com.github.luchbheag.livejournal_telegrambot.command.CommandName.NO;
 
 /**
@@ -36,11 +38,13 @@ public class LiveJournalTelegramBot extends TelegramLongPollingBot {
     @Autowired
     public LiveJournalTelegramBot(TelegramUserService telegramUserService,
                                   BlogSubService blogSubService,
-                                  LivejournalParser livejournalParser) {
+                                  LivejournalParser livejournalParser,
+                                  @Value("#{'${bot.admins}'.split(',')}") List<String> admins) {
         this.commandContainer = new CommandContainer(new SendBotMessageServiceImpl(this),
                 telegramUserService,
                 blogSubService,
-                livejournalParser);
+                livejournalParser,
+                admins);
     }
 
     @Override
@@ -49,10 +53,10 @@ public class LiveJournalTelegramBot extends TelegramLongPollingBot {
             String message = update.getMessage().getText().trim();
             if (message.startsWith(COMMAND_PREFIX)) {
                 String commandIdentifirer = message.split(" ")[0].toLowerCase();
-
-                commandContainer.retrieveCommand(commandIdentifirer).execute(update);
+                String username = update.getMessage().getFrom().getUserName();
+                commandContainer.retrieveCommand(commandIdentifirer, username).execute(update);
             } else {
-                commandContainer.retrieveCommand(NO.getCommandName()).execute(update);
+                commandContainer.retrieveCommand(NO.getCommandName(), username).execute(update);
             }
         }
     }
