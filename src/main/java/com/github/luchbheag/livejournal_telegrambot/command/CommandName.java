@@ -11,7 +11,8 @@ public enum CommandName {
     NO("nocommand"),
     ADD_BLOG_SUB("/addblogsub"),
     LIST_BLOG_SUB("/listblogsub"),
-    DELETE_BLOG_SUB("/deleteblogsub");
+    DELETE_BLOG_SUB("/deleteblogsub"),
+    ADMIN_HELP("/ahelp");
 
     private final String commandName;
 

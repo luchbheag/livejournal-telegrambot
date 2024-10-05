@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
+import java.util.List;
 
 @DisplayName("Unit-level testing for CommandContainer")
 public class CommandContainerTest {
@@ -24,14 +25,14 @@ public class CommandContainerTest {
         BlogSubService blosubService = Mockito.mock(BlogSubService.class);
         LivejournalParser livejournalParser = Mockito.mock(LivejournalParser.class);
         commandContainer = new CommandContainer(sendBotMessageService, telegramUserService,
-                blosubService, livejournalParser);
+                blosubService, livejournalParser, List.of("username"));
     }
 
     @Test
     public void shouldGetAllTheExistingCommands() {
         // when-then
         Arrays.stream(CommandName.values()).forEach(commandName -> {
-            Command command = commandContainer.retrieveCommand(commandName.getCommandName());
+            Command command = commandContainer.retrieveCommand(commandName.getCommandName(), "username");
             Assertions.assertNotEquals(UnknownCommand.class, command.getClass());
         });
     }
@@ -42,7 +43,7 @@ public class CommandContainerTest {
         String unknownCommand = "/asdkldanngw";
 
         // when
-        Command command = commandContainer.retrieveCommand(unknownCommand);
+        Command command = commandContainer.retrieveCommand(unknownCommand, "username");
 
         // then
         Assertions.assertEquals(UnknownCommand.class, command.getClass());
