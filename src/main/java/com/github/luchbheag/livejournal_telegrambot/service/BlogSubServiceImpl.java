@@ -1,6 +1,7 @@
 package com.github.luchbheag.livejournal_telegrambot.service;
 
 import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParser;
+import com.github.luchbheag.livejournal_telegrambot.parser.excpection.CannotParsePageException;
 import com.github.luchbheag.livejournal_telegrambot.repository.BlogSubRepository;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.TelegramUser;
@@ -29,7 +30,7 @@ public class BlogSubServiceImpl implements BlogSubService {
     }
 
     @Override
-    public BlogSub save(String chatId, String blogName) throws HttpStatusException, NotFoundException {
+    public BlogSub save(String chatId, String blogName) throws HttpStatusException, NotFoundException, CannotParsePageException {
         // TODO exception message and exception handling
         TelegramUser telegramUser = telegramUserService.findByChatId(chatId).orElseThrow(NotFoundException::new);
         BlogSub blogSub;

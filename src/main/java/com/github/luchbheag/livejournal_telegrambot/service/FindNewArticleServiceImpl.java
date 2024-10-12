@@ -2,6 +2,7 @@ package com.github.luchbheag.livejournal_telegrambot.service;
 
 import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParser;
 import com.github.luchbheag.livejournal_telegrambot.parser.dto.ArticlePreview;
+import com.github.luchbheag.livejournal_telegrambot.parser.excpection.CannotParsePageException;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.TelegramUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,15 @@ public class FindNewArticleServiceImpl implements FindNewArticleService {
     }
 
     @Override
-    public void finNewArticles() {
+    public void findNewArticles() {
         blogSubService.findAll().forEach(blogSub -> {
-            List<ArticlePreview> newArticles = livejournalParser.getAllArticlePreviewsSinceId(blogSub.getId(), blogSub.getLastArticleId());
-            setNewArticlePreview(blogSub, newArticles);
-            notifySubscribersAboutNewArticles(blogSub, newArticles);
+            try {
+                List<ArticlePreview> newArticles = livejournalParser.getAllArticlePreviewsSinceId(blogSub.getId(), blogSub.getLastArticleId());
+                setNewArticlePreview(blogSub, newArticles);
+                notifySubscribersAboutNewArticles(blogSub, newArticles);
+            } catch (CannotParsePageException e) {
+                e.printStackTrace();
+            }
         });
     }
 

@@ -18,6 +18,7 @@ import static java.util.Objects.isNull;
 @Setter
 @Getter
 public class BlogSub {
+    // TODO: make Blog as an abstract class?
     @Id
     @Column(name = "id")
     private String id;

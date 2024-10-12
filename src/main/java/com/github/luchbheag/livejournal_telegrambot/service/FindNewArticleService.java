@@ -8,5 +8,5 @@ public interface FindNewArticleService {
     /**
      * Find new articles and notify subscribers about it.
      */
-    void finNewArticles();
+    void findNewArticles();
 }

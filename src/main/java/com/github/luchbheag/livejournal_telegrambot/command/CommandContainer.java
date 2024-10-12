@@ -5,6 +5,7 @@ import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParser;
 import com.github.luchbheag.livejournal_telegrambot.service.BlogSubService;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageService;
 import com.github.luchbheag.livejournal_telegrambot.service.TelegramUserService;
+import com.github.luchbheag.livejournal_telegrambot.service.UnparsedBlogService;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class CommandContainer {
                             TelegramUserService telegramUserService,
                             BlogSubService blogSubService,
                             LivejournalParser livejournalParser,
+                            UnparsedBlogService unparsedBlogService,
                             List<String> admins) {
         this.admins = admins;
         commandMap = ImmutableMap.<String, Command>builder()
@@ -31,7 +33,7 @@ public class CommandContainer {
                 .put(HELP.getCommandName(), new HelpCommand(sendBotMessageService))
                 .put(NO.getCommandName(), new NoCommand(sendBotMessageService))
                 .put(STAT.getCommandName(), new StatCommand(sendBotMessageService, telegramUserService))
-                .put(ADD_BLOG_SUB.getCommandName(), new AddBlogSubCommand(sendBotMessageService, livejournalParser, blogSubService))
+                .put(ADD_BLOG_SUB.getCommandName(), new AddBlogSubCommand(sendBotMessageService, blogSubService, unparsedBlogService, admins))
                 .put(LIST_BLOG_SUB.getCommandName(), new ListBlogSubCommand(sendBotMessageService, telegramUserService))
                 .put(DELETE_BLOG_SUB.getCommandName(), new DeleteBlogSubCommand(sendBotMessageService, telegramUserService, blogSubService))
                 .put(ADMIN_HELP.getCommandName(), new AdminHelpCommand(sendBotMessageService))
