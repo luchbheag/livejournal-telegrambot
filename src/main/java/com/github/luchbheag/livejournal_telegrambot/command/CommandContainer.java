@@ -33,7 +33,7 @@ public class CommandContainer {
                 .put(HELP.getCommandName(), new HelpCommand(sendBotMessageService))
                 .put(NO.getCommandName(), new NoCommand(sendBotMessageService))
                 .put(STAT.getCommandName(), new StatCommand(sendBotMessageService, telegramUserService))
-                .put(ADD_BLOG_SUB.getCommandName(), new AddBlogSubCommand(sendBotMessageService, blogSubService, unparsedBlogService, admins))
+                .put(ADD_BLOG_SUB.getCommandName(), new AddBlogSubCommand(sendBotMessageService, blogSubService, unparsedBlogService))
                 .put(LIST_BLOG_SUB.getCommandName(), new ListBlogSubCommand(sendBotMessageService, telegramUserService))
                 .put(DELETE_BLOG_SUB.getCommandName(), new DeleteBlogSubCommand(sendBotMessageService, telegramUserService, blogSubService))
                 .put(ADMIN_HELP.getCommandName(), new AdminHelpCommand(sendBotMessageService))

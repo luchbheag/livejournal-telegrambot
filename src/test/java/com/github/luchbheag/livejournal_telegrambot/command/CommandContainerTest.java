@@ -4,6 +4,7 @@ import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParser;
 import com.github.luchbheag.livejournal_telegrambot.service.BlogSubService;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageService;
 import com.github.luchbheag.livejournal_telegrambot.service.TelegramUserService;
+import com.github.luchbheag.livejournal_telegrambot.service.UnparsedBlogService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,8 +25,9 @@ public class CommandContainerTest {
         TelegramUserService telegramUserService = Mockito.mock(TelegramUserService.class);
         BlogSubService blosubService = Mockito.mock(BlogSubService.class);
         LivejournalParser livejournalParser = Mockito.mock(LivejournalParser.class);
+        UnparsedBlogService unparsedBlogService = Mockito.mock(UnparsedBlogService.class);
         commandContainer = new CommandContainer(sendBotMessageService, telegramUserService,
-                blosubService, livejournalParser, List.of("username"));
+                blosubService, livejournalParser, unparsedBlogService, List.of("username"));
     }
 
     @Test

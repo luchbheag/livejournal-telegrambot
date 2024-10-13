@@ -27,16 +27,13 @@ public class AddBlogSubCommand implements Command {
     private final SendBotMessageService sendBotMessageService;
     private final BlogSubService blogSubService;
     private final UnparsedBlogService unparsedBlogService;
-    List<String> admins;
 
     public AddBlogSubCommand(SendBotMessageService sendBotMessageService,
                              BlogSubService blogSubService,
-                             UnparsedBlogService unparsedBlogService,
-                             List<String> admins) {
+                             UnparsedBlogService unparsedBlogService) {
         this.sendBotMessageService = sendBotMessageService;
         this.blogSubService = blogSubService;
         this.unparsedBlogService = unparsedBlogService;
-        this.admins = admins;
     }
 
     @Override
@@ -74,13 +71,6 @@ public class AddBlogSubCommand implements Command {
 
         sendBotMessageService.sendMessage(chatId, blogExampleMessage);
     }
-
-//    private void notifyAdmins(List<String> admins, String blogName) {
-//        final String message = "The blog %s (https://%s.livejournal.com) cannot be parsed.";
-//        for (String adminId : admins) {
-//            sendBotMessageService.sendMessage(adminId, String.format(message, blogName, blogName));
-//        }
-//    }
 
     private void sendBlogWillBeParsed(String chatId, String blogName) {
         final String blogWillBeParsedMessage = "I cannot parse the blog %s (https://%s.livejournal.com)."
