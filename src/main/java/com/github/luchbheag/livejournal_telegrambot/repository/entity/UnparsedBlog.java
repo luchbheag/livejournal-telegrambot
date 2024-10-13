@@ -13,22 +13,19 @@ import static java.util.Objects.isNull;
 
 @Data
 @Entity
-@Table(name = "blog_sub")
+@Table(name = "unparsed_blog")
 @EqualsAndHashCode
 @Setter
 @Getter
-public class BlogSub {
-    // TODO: make Blog as an abstract class?
+public class UnparsedBlog {
     @Id
     @Column(name = "id")
     private String id;
 
-    private int lastArticleId;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "blog_x_user",
-            joinColumns = @JoinColumn(name = "blog_sub_id"),
+            name = "unparsed_x_user",
+            joinColumns = @JoinColumn(name = "unparsed_blog_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<TelegramUser> users;

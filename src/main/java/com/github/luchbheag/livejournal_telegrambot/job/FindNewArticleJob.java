@@ -27,7 +27,7 @@ public class FindNewArticleJob {
         LocalDateTime startTime = LocalDateTime.now();
         log.info("Find new article job started.");
 
-        findNewArticleService.finNewArticles();
+        findNewArticleService.findNewArticles();
 
         LocalDateTime endTime = LocalDateTime.now();
         log.info("Find new article job finished. Took seconds: {}",

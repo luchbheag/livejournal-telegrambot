@@ -1,6 +1,7 @@
 package com.github.luchbheag.livejournal_telegrambot.parser;
 
 import com.github.luchbheag.livejournal_telegrambot.parser.dto.ArticlePreview;
+import com.github.luchbheag.livejournal_telegrambot.parser.excpection.CannotParsePageException;
 import lombok.Getter;
 import lombok.Setter;
 import org.jsoup.HttpStatusException;
@@ -21,35 +22,31 @@ public class LivejournalParserImpl implements LivejournalParser {
     private int limit = 10;
 
     @Override
-    public int getLastArticleId(String journalName) throws HttpStatusException {
+    public int getLastArticleId(String journalName) throws HttpStatusException, CannotParsePageException {
         ArticlePreview articlePreview = null;
+        String stringUrl = String.format("https://%s.livejournal.com/", journalName);
+        List<ArticlePreview> listWithFirstArticlePreview = null;
         // TODO: try to get this without list, just by one select (except settings)
         try {
-            String stringUrl = String.format("https://%s.livejournal.com/", journalName);
-            List<ArticlePreview> listWithFirstArticlePreview = getAllArticlePreviewsFromPageSinceId(stringUrl, 0, 1);
-            if (listWithFirstArticlePreview.isEmpty()) {
-                articlePreview = new ArticlePreview();
-                articlePreview.setId(0);
-                articlePreview.setMainHeader("");
-                articlePreview.setSubHeader("");
-                articlePreview.setText("");
-                articlePreview.setLink("");
-            } else {
-                articlePreview = listWithFirstArticlePreview.get(0);
-            }
+            listWithFirstArticlePreview = getAllArticlePreviewsFromPageSinceId(stringUrl, 0, 1);
         } catch (HttpStatusException httpException) {
             // no such a page, should be thrown futher
             httpException.printStackTrace();
             httpException.getStatusCode();
             throw httpException;
-        } catch (IOException ioException) {
+        } catch (CannotParsePageException cannotParsePageException) {
+            throw cannotParsePageException;
+        }
+        catch (IOException ioException) {
             ioException.printStackTrace();
         }
-        return articlePreview != null ? articlePreview.getId() : 0;
+        articlePreview = listWithFirstArticlePreview.get(0);
+
+        return articlePreview.getId();
     }
 
     @Override
-    public List<ArticlePreview> getAllArticlePreviewsSinceId(String journalName, int id) {
+    public List<ArticlePreview> getAllArticlePreviewsSinceId(String journalName, int id) throws CannotParsePageException {
         List<ArticlePreview> articlePreviews = new ArrayList<>();
         int skip = 0;
         int size;
@@ -69,9 +66,13 @@ public class LivejournalParserImpl implements LivejournalParser {
         return articlePreviews;
     }
 
-    private List<ArticlePreview> getAllArticlePreviewsFromPageSinceId(String stringUrl, int id, int limit) throws HttpStatusException, IOException {
+    private List<ArticlePreview> getAllArticlePreviewsFromPageSinceId(String stringUrl, int id, int limit) throws HttpStatusException, IOException, CannotParsePageException {
         Document doc = Jsoup.connect(stringUrl).get();
-        Elements elements = doc.select("div.post-asset");
+        String cssQuery = "div.post-asset";
+        Elements elements = doc.select(cssQuery);
+        if (elements.isEmpty()) {
+            throw new CannotParsePageException(String.format("Cannot parse page.\nURL: %s\ncssQuery: %s", stringUrl, cssQuery));
+        }
         List<ArticlePreview> articlePreviews = new ArrayList<>();
         for (Element element : elements) {
             if (isNotStickyArticle(element)) {

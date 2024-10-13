@@ -1,6 +1,7 @@
 package com.github.luchbheag.livejournal_telegrambot.service;
 
 import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParser;
+import com.github.luchbheag.livejournal_telegrambot.parser.excpection.CannotParsePageException;
 import com.github.luchbheag.livejournal_telegrambot.repository.BlogSubRepository;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.TelegramUser;
@@ -23,7 +24,7 @@ public class BlogSubServiceTest {
     private final static String CHAT_ID = "1";
 
     @BeforeEach
-    public void init() throws HttpStatusException, NotFoundException {
+    public void init() throws HttpStatusException, NotFoundException, CannotParsePageException {
         TelegramUserService telegramUserService = Mockito.mock(TelegramUserService.class);
         blogSubRepository = Mockito.mock(BlogSubRepository.class);
         LivejournalParser livejournalParser = Mockito.mock(LivejournalParser.class);
@@ -63,7 +64,7 @@ public class BlogSubServiceTest {
 //    }
 
     @Test
-    public void shouldProperlyAddUserToExistingBlog() throws HttpStatusException, NotFoundException {
+    public void shouldProperlyAddUserToExistingBlog() throws HttpStatusException, NotFoundException, CannotParsePageException {
         // given
         TelegramUser oldTelegramUser = new TelegramUser();
         oldTelegramUser.setChatId("2");
