@@ -60,6 +60,7 @@ public class FindNewArticleServiceImpl implements FindNewArticleService {
     private void setNewArticlePreview(BlogSub blogSub, List<ArticlePreview> newArticles) {
         if (!newArticles.isEmpty()) {
             blogSub.setLastArticleId(newArticles.get(0).getId());
+            blogSubService.save(blogSub);
         }
     }
 

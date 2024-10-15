@@ -14,18 +14,13 @@ public class AdminHelpCommand implements Command {
             + "%s - bot stats\n",
             STAT.getCommandName());
     private final SendBotMessageService sendBotMessageService;
-    private final ConfirmationInfoService confirmationInfoService;
 
-    public AdminHelpCommand(SendBotMessageService sendBotMessageService,
-                            ConfirmationInfoService confirmationInfoService) {
+    public AdminHelpCommand(SendBotMessageService sendBotMessageService) {
         this.sendBotMessageService = sendBotMessageService;
-        this.confirmationInfoService = confirmationInfoService;
     }
 
     @Override
     public void execute(Update update) {
-        String chatId = getChatId(update);
-        confirmationInfoService.deleteById(chatId);
-        sendBotMessageService.sendMessage(chatId, ADMIN_HELP_MESSAGE);
+        sendBotMessageService.sendMessage(getChatId(update), ADMIN_HELP_MESSAGE);
     }
 }

@@ -19,6 +19,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.github.luchbheag.livejournal_telegrambot.command.AbstractCommandTest.prepareUpdate;
 import static com.github.luchbheag.livejournal_telegrambot.command.CommandName.ADD_BLOG_SUB;
+import static com.github.luchbheag.livejournal_telegrambot.command.CommandName.HELP;
 
 @DisplayName("Unit-level testing for AddBlogSubCommand")
 public class AddBlogSubCommandTest {
@@ -26,7 +27,6 @@ public class AddBlogSubCommandTest {
     private Command command;
     private SendBotMessageService sendBotMessageService;
     private BlogSubService blogSubService;
-    private UnparsedBlogService unparsedBlogService;
     private ConfirmationInfoService confirmationInfoService;
 
     @BeforeEach
@@ -77,9 +77,9 @@ public class AddBlogSubCommandTest {
         String blogName = "example";
         Update update = prepareUpdate(chatId, String.format("%s %s", ADD_BLOG_SUB.getCommandName(), blogName));
         Mockito.when(blogSubService.save(chatId.toString(), blogName)).thenThrow(CannotParsePageException.class);
-        String blogNotFoundMessage = String.format("I cannot parse the blog %s (https://%s.livejournal.com)."
-                + "I've added it to your waiting list. "
-                + "You'll get notification when we fix it.", blogName, blogName);
+        String blogNotFoundMessage = String.format("I cannot parse the blog %s (https://%s.livejournal.com) for now. I can put you in the waiting list for it. "
+                + "It means I'll work on this problem and send you notification after finishing. To confirm, write <b>yes</b>.\n\n"
+                + "If you're not interested, just send me another command. To see all available commands, type \"%s\"", blogName, blogName, HELP.getCommandName());
 
         // when
         command.execute(update);
