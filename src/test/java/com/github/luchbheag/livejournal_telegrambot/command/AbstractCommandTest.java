@@ -1,6 +1,7 @@
 package com.github.luchbheag.livejournal_telegrambot.command;
 
 import com.github.luchbheag.livejournal_telegrambot.bot.LiveJournalTelegramBot;
+import com.github.luchbheag.livejournal_telegrambot.service.ConfirmationInfoService;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageService;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageServiceImpl;
 import com.github.luchbheag.livejournal_telegrambot.service.TelegramUserService;
