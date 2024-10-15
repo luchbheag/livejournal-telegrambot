@@ -3,6 +3,7 @@ package com.github.luchbheag.livejournal_telegrambot.command;
 
 import com.github.luchbheag.livejournal_telegrambot.parser.excpection.CannotParsePageException;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
+import com.github.luchbheag.livejournal_telegrambot.repository.entity.ConfirmationInfo;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.TelegramUser;
 import com.github.luchbheag.livejournal_telegrambot.service.BlogSubService;
 import com.github.luchbheag.livejournal_telegrambot.service.ConfirmationInfoService;
@@ -71,7 +72,7 @@ public class AddBlogSubCommandTest {
     }
 
     @Test
-    public void shouldProperlySendMessageIfBlogCannotBeParsed() throws HttpStatusException, NotFoundException, CannotParsePageException {
+    public void shouldProperlySaveConfirmationInfoWhenUnparsedBlog() throws HttpStatusException, NotFoundException, CannotParsePageException {
         // given
         Long chatId = 123456L;
         String blogName = "example";
@@ -85,6 +86,7 @@ public class AddBlogSubCommandTest {
         command.execute(update);
 
         // then
+        Mockito.verify(confirmationInfoService).save(String.valueOf(chatId), blogName);
         Mockito.verify(sendBotMessageService).sendMessage(chatId.toString(), blogNotFoundMessage);
     }
 
