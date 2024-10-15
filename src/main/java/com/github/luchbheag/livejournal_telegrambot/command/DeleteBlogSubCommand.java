@@ -3,10 +3,10 @@ package com.github.luchbheag.livejournal_telegrambot.command;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.TelegramUser;
 import com.github.luchbheag.livejournal_telegrambot.service.BlogSubService;
+import com.github.luchbheag.livejournal_telegrambot.service.ConfirmationInfoService;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageService;
 import com.github.luchbheag.livejournal_telegrambot.service.TelegramUserService;
 import jakarta.ws.rs.NotFoundException;
-import org.hibernate.annotations.NotFound;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
@@ -38,11 +38,12 @@ public class DeleteBlogSubCommand implements Command {
         final String SUCCESS_MESSAGE = "I've deleted your subscription on blog: %s.";
         final String NOT_FOUND_MESSAGE = "I haven't found subscription %s.";
         boolean wasSubscribed = false;
+
+        String chatId = getChatId(update);
         if (getMessage(update).equalsIgnoreCase(DELETE_BLOG_SUB.getCommandName())) {
-            sendBlogList(getChatId(update));
+            sendBlogList(chatId);
         } else {
             String blogId = getMessage(update).split(SPACE)[1];
-            String chatId = getChatId(update);
             Optional<BlogSub> optionalBlogSub = blogSubService.findById(blogId);
             if (optionalBlogSub.isPresent()) {
                 BlogSub blogSub = optionalBlogSub.get();

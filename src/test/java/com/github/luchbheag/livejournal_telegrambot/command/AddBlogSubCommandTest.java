@@ -5,6 +5,7 @@ import com.github.luchbheag.livejournal_telegrambot.parser.excpection.CannotPars
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.TelegramUser;
 import com.github.luchbheag.livejournal_telegrambot.service.BlogSubService;
+import com.github.luchbheag.livejournal_telegrambot.service.ConfirmationInfoService;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageService;
 import com.github.luchbheag.livejournal_telegrambot.service.UnparsedBlogService;
 import jakarta.ws.rs.NotFoundException;
@@ -12,6 +13,7 @@ import org.jsoup.HttpStatusException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -25,14 +27,15 @@ public class AddBlogSubCommandTest {
     private SendBotMessageService sendBotMessageService;
     private BlogSubService blogSubService;
     private UnparsedBlogService unparsedBlogService;
+    private ConfirmationInfoService confirmationInfoService;
 
     @BeforeEach
     public void  init() {
         sendBotMessageService = Mockito.mock(SendBotMessageService.class);
         blogSubService = Mockito.mock(BlogSubService.class);
-        unparsedBlogService = Mockito.mock(UnparsedBlogService.class);
+        confirmationInfoService = Mockito.mock(ConfirmationInfoService.class);
         command = new AddBlogSubCommand(sendBotMessageService,
-                blogSubService, unparsedBlogService);
+                blogSubService, confirmationInfoService);
     }
 
     @Test

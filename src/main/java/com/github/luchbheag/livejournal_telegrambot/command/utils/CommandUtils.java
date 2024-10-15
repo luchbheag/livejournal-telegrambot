@@ -23,6 +23,6 @@ public class CommandUtils {
      * @return {@link String} text of message
      */
     public static String getMessage(Update update) {
-        return update.getMessage().getText();
+        return update.getMessage().getText().trim();
     }
 }

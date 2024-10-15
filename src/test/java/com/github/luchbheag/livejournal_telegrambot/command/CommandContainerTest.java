@@ -24,10 +24,9 @@ public class CommandContainerTest {
         SendBotMessageService sendBotMessageService = Mockito.mock(SendBotMessageService.class);
         TelegramUserService telegramUserService = Mockito.mock(TelegramUserService.class);
         BlogSubService blosubService = Mockito.mock(BlogSubService.class);
-        LivejournalParser livejournalParser = Mockito.mock(LivejournalParser.class);
         UnparsedBlogService unparsedBlogService = Mockito.mock(UnparsedBlogService.class);
         commandContainer = new CommandContainer(sendBotMessageService, telegramUserService,
-                blosubService, livejournalParser, unparsedBlogService, List.of("username"));
+                blosubService, unparsedBlogService, List.of("username"));
     }
 
     @Test
