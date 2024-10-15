@@ -1,20 +1,16 @@
 package com.github.luchbheag.livejournal_telegrambot.command;
 
-import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParser;
 import com.github.luchbheag.livejournal_telegrambot.parser.excpection.CannotParsePageException;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
-import com.github.luchbheag.livejournal_telegrambot.repository.entity.TelegramUser;
-import com.github.luchbheag.livejournal_telegrambot.repository.entity.UnparsedBlog;
 import com.github.luchbheag.livejournal_telegrambot.service.BlogSubService;
+import com.github.luchbheag.livejournal_telegrambot.service.ConfirmationInfoService;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageService;
-import com.github.luchbheag.livejournal_telegrambot.service.UnparsedBlogService;
 import jakarta.ws.rs.NotFoundException;
 import org.jsoup.HttpStatusException;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.List;
-import java.util.Optional;
 
+import static com.github.luchbheag.livejournal_telegrambot.command.CommandName.HELP;
 import static com.github.luchbheag.livejournal_telegrambot.command.utils.CommandUtils.*;
 import static com.github.luchbheag.livejournal_telegrambot.command.CommandName.ADD_BLOG_SUB;
 import static org.apache.commons.lang3.StringUtils.SPACE;
@@ -26,21 +22,21 @@ public class AddBlogSubCommand implements Command {
 
     private final SendBotMessageService sendBotMessageService;
     private final BlogSubService blogSubService;
-    private final UnparsedBlogService unparsedBlogService;
+    private final ConfirmationInfoService confirmationInfoService;
 
     public AddBlogSubCommand(SendBotMessageService sendBotMessageService,
                              BlogSubService blogSubService,
-                             UnparsedBlogService unparsedBlogService) {
+                             ConfirmationInfoService confirmationInfoService) {
         this.sendBotMessageService = sendBotMessageService;
         this.blogSubService = blogSubService;
-        this.unparsedBlogService = unparsedBlogService;
+        this.confirmationInfoService = confirmationInfoService;
     }
 
     @Override
     public void execute(Update update) {
         String chatId = getChatId(update);
+        confirmationInfoService.deleteById(chatId);
         if (getMessage(update).equalsIgnoreCase(ADD_BLOG_SUB.getCommandName())) {
-            // should be like that /addblogsub
             sendBlogExample(chatId);
             return;
         }
@@ -50,10 +46,8 @@ public class AddBlogSubCommand implements Command {
             BlogSub savedBlogSub = blogSubService.save(chatId, blogName);
             sendBotMessageService.sendMessage(chatId, "I've subscribed you to blog " + savedBlogSub.getId());
         } catch (CannotParsePageException e) {
-            // TODO: verification if person want to wait for parsing
-            unparsedBlogService.save(chatId, blogName);
-//            notifyAdmins(admins, blogName);
-            sendBlogWillBeParsed(chatId, blogName);
+            confirmationInfoService.save(chatId, blogName);
+            sendAskForVerification(chatId, blogName);
         } catch (HttpStatusException | NotFoundException httpStatusException) {
             sendBlogNotFound(chatId, blogName);
         }
@@ -72,10 +66,10 @@ public class AddBlogSubCommand implements Command {
         sendBotMessageService.sendMessage(chatId, blogExampleMessage);
     }
 
-    private void sendBlogWillBeParsed(String chatId, String blogName) {
-        final String blogWillBeParsedMessage = "I cannot parse the blog %s (https://%s.livejournal.com)."
-                + "I've added it to your waiting list. "
-                + "You'll get notification when we fix it.";
-        sendBotMessageService.sendMessage(chatId, String.format(blogWillBeParsedMessage, blogName, blogName));
+    private void sendAskForVerification(String chatId, String blogName) {
+        String message = "I cannot parse the blog %s (https://%s.livejournal.com) for now. I can put you in the waiting list for it. "
+        + "It means I'll work on this problem and send you notification after finishing. To confirm, write <b>yes</b>.\n\n"
+                + "If you're not interested, just send me another command. To see all available commands, type \"%s\"";
+        sendBotMessageService.sendMessage(chatId, String.format(message, blogName, blogName, HELP.getCommandName()));
     }
 }

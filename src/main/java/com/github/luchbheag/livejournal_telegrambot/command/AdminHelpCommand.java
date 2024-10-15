@@ -1,8 +1,10 @@
 package com.github.luchbheag.livejournal_telegrambot.command;
 
+import com.github.luchbheag.livejournal_telegrambot.service.ConfirmationInfoService;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageService;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import static com.github.luchbheag.livejournal_telegrambot.command.CommandName.STAT;
+import static com.github.luchbheag.livejournal_telegrambot.command.utils.CommandUtils.getChatId;
 /**
  * Admin Help {@link Command}.
  */
@@ -19,6 +21,6 @@ public class AdminHelpCommand implements Command {
 
     @Override
     public void execute(Update update) {
-        sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), ADMIN_HELP_MESSAGE);
+        sendBotMessageService.sendMessage(getChatId(update), ADMIN_HELP_MESSAGE);
     }
 }

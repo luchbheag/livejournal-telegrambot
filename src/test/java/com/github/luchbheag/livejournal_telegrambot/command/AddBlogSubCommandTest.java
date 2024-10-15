@@ -3,8 +3,10 @@ package com.github.luchbheag.livejournal_telegrambot.command;
 
 import com.github.luchbheag.livejournal_telegrambot.parser.excpection.CannotParsePageException;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
+import com.github.luchbheag.livejournal_telegrambot.repository.entity.ConfirmationInfo;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.TelegramUser;
 import com.github.luchbheag.livejournal_telegrambot.service.BlogSubService;
+import com.github.luchbheag.livejournal_telegrambot.service.ConfirmationInfoService;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageService;
 import com.github.luchbheag.livejournal_telegrambot.service.UnparsedBlogService;
 import jakarta.ws.rs.NotFoundException;
@@ -12,11 +14,13 @@ import org.jsoup.HttpStatusException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.github.luchbheag.livejournal_telegrambot.command.AbstractCommandTest.prepareUpdate;
 import static com.github.luchbheag.livejournal_telegrambot.command.CommandName.ADD_BLOG_SUB;
+import static com.github.luchbheag.livejournal_telegrambot.command.CommandName.HELP;
 
 @DisplayName("Unit-level testing for AddBlogSubCommand")
 public class AddBlogSubCommandTest {
@@ -24,15 +28,15 @@ public class AddBlogSubCommandTest {
     private Command command;
     private SendBotMessageService sendBotMessageService;
     private BlogSubService blogSubService;
-    private UnparsedBlogService unparsedBlogService;
+    private ConfirmationInfoService confirmationInfoService;
 
     @BeforeEach
     public void  init() {
         sendBotMessageService = Mockito.mock(SendBotMessageService.class);
         blogSubService = Mockito.mock(BlogSubService.class);
-        unparsedBlogService = Mockito.mock(UnparsedBlogService.class);
+        confirmationInfoService = Mockito.mock(ConfirmationInfoService.class);
         command = new AddBlogSubCommand(sendBotMessageService,
-                blogSubService, unparsedBlogService);
+                blogSubService, confirmationInfoService);
     }
 
     @Test
@@ -68,20 +72,21 @@ public class AddBlogSubCommandTest {
     }
 
     @Test
-    public void shouldProperlySendMessageIfBlogCannotBeParsed() throws HttpStatusException, NotFoundException, CannotParsePageException {
+    public void shouldProperlySaveConfirmationInfoWhenUnparsedBlog() throws HttpStatusException, NotFoundException, CannotParsePageException {
         // given
         Long chatId = 123456L;
         String blogName = "example";
         Update update = prepareUpdate(chatId, String.format("%s %s", ADD_BLOG_SUB.getCommandName(), blogName));
         Mockito.when(blogSubService.save(chatId.toString(), blogName)).thenThrow(CannotParsePageException.class);
-        String blogNotFoundMessage = String.format("I cannot parse the blog %s (https://%s.livejournal.com)."
-                + "I've added it to your waiting list. "
-                + "You'll get notification when we fix it.", blogName, blogName);
+        String blogNotFoundMessage = String.format("I cannot parse the blog %s (https://%s.livejournal.com) for now. I can put you in the waiting list for it. "
+                + "It means I'll work on this problem and send you notification after finishing. To confirm, write <b>yes</b>.\n\n"
+                + "If you're not interested, just send me another command. To see all available commands, type \"%s\"", blogName, blogName, HELP.getCommandName());
 
         // when
         command.execute(update);
 
         // then
+        Mockito.verify(confirmationInfoService).save(String.valueOf(chatId), blogName);
         Mockito.verify(sendBotMessageService).sendMessage(chatId.toString(), blogNotFoundMessage);
     }
 

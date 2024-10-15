@@ -48,7 +48,7 @@ public class FindNewArticleServiceImpl implements FindNewArticleService {
                 + "<b>%s</b>\n"
                 + "%s\n\n"
                 + "%s\n"
-                + "Link: %s", article.getMainHeader(), article.getSubHeader(),
+                + "Link: %s", blogSub.getId(), article.getMainHeader(), article.getSubHeader(),
                         article.getText(), article.getLink()))
                 .toList();
 
@@ -60,6 +60,7 @@ public class FindNewArticleServiceImpl implements FindNewArticleService {
     private void setNewArticlePreview(BlogSub blogSub, List<ArticlePreview> newArticles) {
         if (!newArticles.isEmpty()) {
             blogSub.setLastArticleId(newArticles.get(0).getId());
+            blogSubService.save(blogSub);
         }
     }
 
