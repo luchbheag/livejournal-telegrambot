@@ -10,7 +10,7 @@ import static com.github.luchbheag.livejournal_telegrambot.command.utils.Command
  */
 public class AdminHelpCommand implements Command {
     public static final String ADMIN_HELP_MESSAGE = String.format(
-            "<b>Available admin commands:\n\n"
+            "<b>Available admin commands</b>:\n\n"
             + "%s - bot stats\n",
             STAT.getCommandName());
     private final SendBotMessageService sendBotMessageService;
