@@ -1,10 +1,8 @@
 package com.github.luchbheag.livejournal_telegrambot.bot;
 
 import com.github.luchbheag.livejournal_telegrambot.command.CommandContainer;
-import com.github.luchbheag.livejournal_telegrambot.repository.entity.ConfirmationInfo;
 import com.github.luchbheag.livejournal_telegrambot.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -51,25 +49,25 @@ public class LiveJournalTelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         final String YES = "yes";
-        String chatId = getChatId(update);
-        boolean isWaitingForConfirm = checkWaitingForConfirm(chatId);
+        String chatUsername = getUsername(update);
+        boolean isWaitingForConfirm = checkWaitingForConfirm(chatUsername);
         if (update.hasMessage() && update.getMessage().hasText()) {
             String message = getMessage(update);
             if (message.startsWith(COMMAND_PREFIX)) {
                 if (isWaitingForConfirm) {
-                    confirmationInfoService.deleteById(chatId);
+                    confirmationInfoService.deleteById(chatUsername);
                 }
                 String commandIdentifier = message.split(" ")[0].toLowerCase();
-                commandContainer.retrieveCommand(commandIdentifier, username).execute(update);
+                commandContainer.retrieveCommand(commandIdentifier, chatUsername).execute(update);
             } else if (isWaitingForConfirm) {
                 if (message.equalsIgnoreCase(YES)) {
-                    commandContainer.retrieveCommand(CONFIRM.getCommandName(), chatId).execute(update);
+                    commandContainer.retrieveCommand(CONFIRM.getCommandName(), chatUsername).execute(update);
                 } else {
                     // TODO: if waiting for confirm, recieve no command w/ other text
-                    commandContainer.retrieveCommand(NO.getCommandName(), chatId).execute(update);
+                    commandContainer.retrieveCommand(NO.getCommandName(), chatUsername).execute(update);
                 }
             } else {
-                commandContainer.retrieveCommand(NO.getCommandName(), chatId).execute(update);
+                commandContainer.retrieveCommand(NO.getCommandName(), chatUsername).execute(update);
             }
         }
     }
