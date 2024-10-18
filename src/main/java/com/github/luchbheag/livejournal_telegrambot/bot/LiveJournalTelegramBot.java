@@ -50,7 +50,8 @@ public class LiveJournalTelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         final String YES = "yes";
         String chatUsername = getUsername(update);
-        boolean isWaitingForConfirm = checkWaitingForConfirm(chatUsername);
+        String chatId = getChatId(update);
+        boolean isWaitingForConfirm = checkWaitingForConfirm(chatId);
         if (update.hasMessage() && update.getMessage().hasText()) {
             String message = getMessage(update);
             if (message.startsWith(COMMAND_PREFIX)) {
