@@ -4,9 +4,10 @@ import com.github.luchbheag.livejournal_telegrambot.repository.entity.UnparsedBl
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * {@link Repository} for handling {@link UnparsedBlog} entity.
  */
 @Repository
-public interface UnparsedBlogRepository extends JpaRepository<UnparsedBlog, String> {
-}
+public interface UnparsedBlogRepository extends JpaRepository<UnparsedBlog, String> {}

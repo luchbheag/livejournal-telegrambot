@@ -36,4 +36,18 @@ public class UnparsedBlog {
         }
         users.add(telegramUser);
     }
+
+    public int compareTo(UnparsedBlog unparsedBlog) {
+        if (isNull(unparsedBlog.getUsers()) && isNull(users)) {
+            return this.id.compareTo(unparsedBlog.id);
+        }
+        if (isNull(this.getUsers())) {
+            return -1;
+        } else if (isNull(unparsedBlog.getUsers())) {
+            return 1;
+        } else {
+            int result = users.size() - unparsedBlog.getUsers().size();
+            return result == 0 ? this.getId().compareTo(unparsedBlog.getId()) : result;
+        }
+    }
 }

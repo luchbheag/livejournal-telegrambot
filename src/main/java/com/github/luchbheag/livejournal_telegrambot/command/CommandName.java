@@ -13,7 +13,8 @@ public enum CommandName {
     LIST_BLOG_SUB("/listblogsub"),
     DELETE_BLOG_SUB("/deleteblogsub"),
     CONFIRM("confirmcommand"),
-    ADMIN_HELP("/ahelp");
+    ADMIN_HELP("/ahelp"),
+    ADMIN_LIST("/alist");
 
     private final String commandName;
 
