@@ -1,8 +1,10 @@
 package com.github.luchbheag.livejournal_telegrambot.bot;
 
 import com.github.luchbheag.livejournal_telegrambot.command.CommandContainer;
+import com.github.luchbheag.livejournal_telegrambot.repository.entity.ConfirmationInfo;
 import com.github.luchbheag.livejournal_telegrambot.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;

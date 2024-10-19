@@ -1,6 +1,7 @@
 package com.github.luchbheag.livejournal_telegrambot.command;
 
 import com.github.luchbheag.livejournal_telegrambot.command.annotation.AdminCommand;
+import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParser;
 import com.github.luchbheag.livejournal_telegrambot.service.*;
 import com.google.common.collect.ImmutableMap;
 

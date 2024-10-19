@@ -26,9 +26,6 @@ public class CommandUtils {
         return update.getMessage().getText().trim();
     }
 
-    /**
-     *
-     */
     public static String getUsername(Update update) {
         return update.getMessage().getFrom().getUserName();
     }
