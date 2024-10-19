@@ -22,7 +22,9 @@ List of available commands:
 **/listblogsub** - list of the blogs user subscribed on <br />
 **/help** - get help working with bot <br />
 
+Admin-only commands:
 **/ahelp** - show list of command available for admins only <br />
-**/stat** - show stat info (how many users use bot etc., admin-only command)
+**/stat** - show stat info (how many users use bot etc.) <br />
+**/alist** - show blogs that are waiting to be parsed
 
 If blog cannot be parsed, the bot offers user to be added in the waiting list and waits for confirmation by **yes** word.
