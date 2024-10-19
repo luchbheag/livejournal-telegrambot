@@ -15,13 +15,13 @@ import static com.github.luchbheag.livejournal_telegrambot.command.utils.Command
  * Admin List Unparsed Blogs {@link Command}.
  */
 @AdminCommand
-public class AdminListUnparsedBlogsCommand implements Command {
+public class AdminListCommand implements Command {
 
     private final SendBotMessageService sendBotMessageService;
     private final UnparsedBlogService unparsedBlogService;
 
-    public AdminListUnparsedBlogsCommand(SendBotMessageService sendBotMessageService,
-                                         UnparsedBlogService unparsedBlogService) {
+    public AdminListCommand(SendBotMessageService sendBotMessageService,
+                            UnparsedBlogService unparsedBlogService) {
         this.sendBotMessageService = sendBotMessageService;
         this.unparsedBlogService = unparsedBlogService;
     }

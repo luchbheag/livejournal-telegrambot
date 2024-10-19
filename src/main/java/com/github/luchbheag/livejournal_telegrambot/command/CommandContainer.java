@@ -1,7 +1,6 @@
 package com.github.luchbheag.livejournal_telegrambot.command;
 
 import com.github.luchbheag.livejournal_telegrambot.command.annotation.AdminCommand;
-import com.github.luchbheag.livejournal_telegrambot.parser.LivejournalParser;
 import com.github.luchbheag.livejournal_telegrambot.service.*;
 import com.google.common.collect.ImmutableMap;
 
@@ -35,7 +34,7 @@ public class CommandContainer {
                 .put(DELETE_BLOG_SUB.getCommandName(), new DeleteBlogSubCommand(sendBotMessageService, telegramUserService, blogSubService))
                 .put(ADMIN_HELP.getCommandName(), new AdminHelpCommand(sendBotMessageService))
                 .put(CONFIRM.getCommandName(), new ConfirmCommand(sendBotMessageService, unparsedBlogService, confirmationInfoService))
-                .put(ADMIN_LIST.getCommandName(), new AdminListUnparsedBlogsCommand(sendBotMessageService, unparsedBlogService))
+                .put(ADMIN_LIST.getCommandName(), new AdminListCommand(sendBotMessageService, unparsedBlogService))
                 .build();
 
         unknownCommand = new UnknownCommand(sendBotMessageService);
