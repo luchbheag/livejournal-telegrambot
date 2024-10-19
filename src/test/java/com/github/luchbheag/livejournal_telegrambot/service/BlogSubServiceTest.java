@@ -40,28 +40,21 @@ public class BlogSubServiceTest {
         Mockito.when(livejournalParser.getLastArticleId("1"))
                 .thenReturn(1);
     }
-    // TODO
-//    @Test
-//    public void shouldProperlySaveBlog() {
-//        // given
-//        ArticlePreview articlePreview = new ArticlePreview();
-//        articlePreview.setId(1);
-//        articlePreview.setMainHeader("Main header");
-//        articlePreview.setSubHeader("Sub header");
-//        articlePreview.setText("text");
-//        articlePreview.setLink("https://link.com");
-//
-//        BlogSub expectedBlogSub = new BlogSub();
-//        expectedBlogSub.setId("1");
-//        expectedBlogSub.setArticlePreview(articlePreview);
-//        expectedBlogSub.addUser(testUser);
-//
-//        // when
-//        blogSubRepository.save("1");
-//
-//        // then
-//        Mockito.verify(blogSubRepository).save(expectedBlogSub);
-//    }
+
+    @Test
+    public void shouldProperlySaveBlogAsEntity() {
+        // given
+        BlogSub expectedBlogSub = new BlogSub();
+        expectedBlogSub.setId("1");
+        expectedBlogSub.setLastArticleId(1);
+        expectedBlogSub.addUser(testUser);
+
+        // when
+        blogSubService.save(expectedBlogSub);
+
+        // then
+        Mockito.verify(blogSubRepository).save(expectedBlogSub);
+    }
 
     @Test
     public void shouldProperlyAddUserToExistingBlog() throws HttpStatusException, NotFoundException, CannotParsePageException {
