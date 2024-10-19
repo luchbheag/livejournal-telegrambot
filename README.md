@@ -15,14 +15,16 @@ docker-compose -f docker-compose.yml up
 ## How to Use Project
 List of available commands:
 
-**/start** - start/restart work with bot <br /> 
-**/stop** - stop work with bot <br /> 
+**/start** - start/restart work with bot <br />
+**/stop** - stop work with bot <br />
 **/addblogsub** - subscribe to blog updates <br />
 **/deleteblogsub** - unsubscribe from blog updates <br />
 **/listblogsub** - list of the blogs user subscribed on <br />
-**/help** - get help working with bot <br /> <br />
+**/help** - get help working with bot <br />
 
+Admin-only commands:
 **/ahelp** - show list of command available for admins only <br />
-**/stat** - show stat info (how many users use bot etc.)
+**/stat** - show stat info (how many users use bot etc.) <br />
+**/alist** - show blogs that are waiting to be parsed
 
 If blog cannot be parsed, the bot offers user to be added in the waiting list and waits for confirmation by **yes** word.
