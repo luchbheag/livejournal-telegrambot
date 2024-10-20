@@ -5,6 +5,7 @@ import com.github.luchbheag.livejournal_telegrambot.repository.entity.TelegramUs
 import com.github.luchbheag.livejournal_telegrambot.service.BlogSubService;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageService;
 import com.github.luchbheag.livejournal_telegrambot.service.TelegramUserService;
+import com.github.luchbheag.livejournal_telegrambot.service.UnparsedBlogService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,14 +26,17 @@ public class DeleteBlogSubCommandTest {
     private SendBotMessageService sendBotMessageService;
     BlogSubService blogSubService;
     TelegramUserService telegramUserService;
+    UnparsedBlogService unparsedBlogService;
 
     @BeforeEach
     public void init() {
         sendBotMessageService = Mockito.mock(SendBotMessageService.class);
         blogSubService = Mockito.mock(BlogSubService.class);
         telegramUserService = Mockito.mock(TelegramUserService.class);
+        unparsedBlogService = Mockito.mock(UnparsedBlogService.class);
 
-        command = new DeleteBlogSubCommand(sendBotMessageService, telegramUserService, blogSubService);
+        command = new DeleteBlogSubCommand(sendBotMessageService, telegramUserService,
+                blogSubService, unparsedBlogService);
     }
 
     @Test

@@ -48,4 +48,19 @@ public class UnparsedBlogServiceImpl implements UnparsedBlogService {
     public List<UnparsedBlog> findAll() {
         return unparsedBlogRepository.findAll();
     }
+
+    @Override
+    public Optional<UnparsedBlog> findById(String blogId) {
+        return unparsedBlogRepository.findById(blogId);
+    }
+
+    @Override
+    public void delete(String blogId) {
+        unparsedBlogRepository.deleteById(blogId);
+    }
+
+    @Override
+    public UnparsedBlog save(UnparsedBlog unparsedBlog) {
+        return unparsedBlogRepository.save(unparsedBlog);
+    }
 }
