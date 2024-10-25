@@ -2,10 +2,8 @@ package com.github.luchbheag.livejournal_telegrambot.command;
 
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.TelegramUser;
-import com.github.luchbheag.livejournal_telegrambot.service.BlogSubService;
-import com.github.luchbheag.livejournal_telegrambot.service.ConfirmationInfoService;
-import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageService;
-import com.github.luchbheag.livejournal_telegrambot.service.TelegramUserService;
+import com.github.luchbheag.livejournal_telegrambot.repository.entity.UnparsedBlog;
+import com.github.luchbheag.livejournal_telegrambot.service.*;
 import jakarta.ws.rs.NotFoundException;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -24,20 +22,25 @@ public class DeleteBlogSubCommand implements Command {
     private final SendBotMessageService sendBotMessageService;
     private final TelegramUserService telegramUserService;
     private final BlogSubService blogSubService;
+    private final UnparsedBlogService unparsedBlogService;
 
     public DeleteBlogSubCommand(SendBotMessageService sendBotMessageService,
                                 TelegramUserService telegramUserService,
-                                BlogSubService blogSubService) {
+                                BlogSubService blogSubService,
+                                UnparsedBlogService unparsedBlogService) {
         this.sendBotMessageService = sendBotMessageService;
         this.telegramUserService = telegramUserService;
         this.blogSubService = blogSubService;
+        this.unparsedBlogService = unparsedBlogService;
     }
 
     @Override
     public void execute(Update update) {
         final String SUCCESS_MESSAGE = "I've deleted your subscription on blog: %s.";
+        final String SUCCESS_UNPARSED_BLOG_MESSAGE = "I've deleted you from a waiting list of blog: %s.";
         final String NOT_FOUND_MESSAGE = "I haven't found subscription %s.";
         boolean wasSubscribed = false;
+        boolean wasWaiting = false;
 
         String chatId = getChatId(update);
         if (getMessage(update).equalsIgnoreCase(DELETE_BLOG_SUB.getCommandName())) {
@@ -45,10 +48,11 @@ public class DeleteBlogSubCommand implements Command {
         } else {
             String blogId = getMessage(update).split(SPACE)[1];
             Optional<BlogSub> optionalBlogSub = blogSubService.findById(blogId);
+            TelegramUser telegramUser = telegramUserService.findByChatId(chatId)
+                    .orElseThrow(NotFoundException::new);
+            // TODO: too many methods, split into private (and probably unite some parts)
             if (optionalBlogSub.isPresent()) {
                 BlogSub blogSub = optionalBlogSub.get();
-                TelegramUser telegramUser = telegramUserService.findByChatId(chatId)
-                        .orElseThrow(NotFoundException::new);
                 wasSubscribed = blogSub.getUsers().remove(telegramUser);
                 if (wasSubscribed) {
                     if (blogSub.getUsers().isEmpty()) {
@@ -57,9 +61,24 @@ public class DeleteBlogSubCommand implements Command {
                         blogSubService.save(blogSub);
                     }
                 }
+            } else {
+                Optional<UnparsedBlog> optionalUnparsedBlog = unparsedBlogService.findById(blogId);
+                if (optionalUnparsedBlog.isPresent()) {
+                    UnparsedBlog unparsedBlog = optionalUnparsedBlog.get();
+                    wasWaiting = unparsedBlog.getUsers().remove(telegramUser);
+                    if (wasWaiting) {
+                        if (unparsedBlog.getUsers().isEmpty()) {
+                            unparsedBlogService.delete(blogId);
+                        } else {
+                            unparsedBlogService.save(unparsedBlog);
+                        }
+                    }
+                }
             }
             if (wasSubscribed) {
                 sendBotMessageService.sendMessage(chatId, String.format(SUCCESS_MESSAGE, blogId));
+            } else if (wasWaiting) {
+                sendBotMessageService.sendMessage(chatId, String.format(SUCCESS_UNPARSED_BLOG_MESSAGE, blogId));
             } else {
                 sendBotMessageService.sendMessage(chatId, String.format(NOT_FOUND_MESSAGE, blogId));
             }

@@ -2,9 +2,12 @@ package com.github.luchbheag.livejournal_telegrambot.command;
 
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.TelegramUser;
+import com.github.luchbheag.livejournal_telegrambot.repository.entity.UnparsedBlog;
 import com.github.luchbheag.livejournal_telegrambot.service.BlogSubService;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageService;
 import com.github.luchbheag.livejournal_telegrambot.service.TelegramUserService;
+import com.github.luchbheag.livejournal_telegrambot.service.UnparsedBlogService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,14 +28,17 @@ public class DeleteBlogSubCommandTest {
     private SendBotMessageService sendBotMessageService;
     BlogSubService blogSubService;
     TelegramUserService telegramUserService;
+    UnparsedBlogService unparsedBlogService;
 
     @BeforeEach
     public void init() {
         sendBotMessageService = Mockito.mock(SendBotMessageService.class);
         blogSubService = Mockito.mock(BlogSubService.class);
         telegramUserService = Mockito.mock(TelegramUserService.class);
+        unparsedBlogService = Mockito.mock(UnparsedBlogService.class);
 
-        command = new DeleteBlogSubCommand(sendBotMessageService, telegramUserService, blogSubService);
+        command = new DeleteBlogSubCommand(sendBotMessageService, telegramUserService,
+                blogSubService, unparsedBlogService);
     }
 
     @Test
@@ -148,18 +154,88 @@ public class DeleteBlogSubCommandTest {
     public void shouldNotifyThatDoesNotFindSubscriptionByBlogId() {
         // given
         Long chatId = 123456L;
+        TelegramUser telegramUser = new TelegramUser();
+        telegramUser.setChatId(String.valueOf(chatId));
+        telegramUser.setActive(true);
         String blogId = "example";
         Update update = prepareUpdate(chatId, String.format("%s %s", DELETE_BLOG_SUB.getCommandName(), blogId));
 
         Mockito.when(blogSubService.findById(blogId)).thenReturn(Optional.empty());
-
+        Mockito.when(telegramUserService.findByChatId(String.valueOf(chatId)))
+                .thenReturn(Optional.of(telegramUser));
         String expectedMessage = String.format("I haven't found subscription %s.", blogId);
 
         // when
         command.execute(update);
 
         // then
+        Mockito.verify(telegramUserService).findByChatId(String.valueOf(chatId));
         Mockito.verify(blogSubService).findById(blogId);
         Mockito.verify(sendBotMessageService).sendMessage(chatId.toString(), expectedMessage);
+    }
+
+    @Test
+    public void shouldProperlyDeleteIfUnparsedBlogWithOnlySubscriber() {
+        // giving
+        Long chatId = 123456L;
+        TelegramUser telegramUser = new TelegramUser();
+        telegramUser.setChatId(String.valueOf(chatId));
+        String blogId = "test";
+        UnparsedBlog unparsedBlog = new UnparsedBlog();
+        unparsedBlog.setId(blogId);
+        unparsedBlog.addUser(telegramUser);
+        String expectedMessage = String.format("I've deleted you from a waiting list of blog: %s.", blogId);
+        Update update = prepareUpdate(chatId, String.format("%s %s", DELETE_BLOG_SUB.getCommandName(), blogId));
+        Mockito.when(telegramUserService.findByChatId(String.valueOf(chatId)))
+                        .thenReturn(Optional.of(telegramUser));
+        Mockito.when(blogSubService.findById(blogId)).thenReturn(Optional.empty());
+        Mockito.when(unparsedBlogService.findById(blogId)).thenReturn(Optional.of(unparsedBlog));
+
+        // when
+        command.execute(update);
+
+        // then
+        Mockito.verify(telegramUserService).findByChatId(String.valueOf(chatId));
+        Mockito.verify(blogSubService).findById(blogId);
+        Mockito.verify(unparsedBlogService).findById(blogId);
+        unparsedBlog.getUsers().remove(telegramUser);
+        Mockito.verify(unparsedBlogService).delete(blogId);
+        Mockito.verify(sendBotMessageService).sendMessage(chatId.toString(), expectedMessage);
+    }
+
+    @Test
+    public void shouldProperlyRemoveUserIfUnparsedBlogWithTwoSubscribers() {
+        // giving
+        Long firstChatId = 123456L;
+        TelegramUser firstTelegramUser = new TelegramUser();
+        firstTelegramUser.setChatId(String.valueOf(firstChatId));
+        firstTelegramUser.setActive(true);
+        Long secondChatId = 654321L;
+        TelegramUser secondTelegramUser = new TelegramUser();
+        secondTelegramUser.setChatId(String.valueOf(secondChatId));
+        secondTelegramUser.setActive(true);
+        String blogId = "test";
+        UnparsedBlog unparsedBlog = new UnparsedBlog();
+        unparsedBlog.setId(blogId);
+        unparsedBlog.addUser(firstTelegramUser);
+        unparsedBlog.addUser(secondTelegramUser);
+        String expectedMessage = String.format("I've deleted you from a waiting list of blog: %s.", blogId);
+        Update update = prepareUpdate(firstChatId, String.format("%s %s", DELETE_BLOG_SUB.getCommandName(), blogId));
+        Mockito.when(telegramUserService.findByChatId(String.valueOf(firstChatId)))
+                        .thenReturn(Optional.of(firstTelegramUser));
+        Mockito.when(blogSubService.findById(blogId)).thenReturn(Optional.empty());
+        Mockito.when(unparsedBlogService.findById(blogId)).thenReturn(Optional.of(unparsedBlog));
+
+        // when
+        command.execute(update);
+
+        // then
+        Mockito.verify(telegramUserService).findByChatId(String.valueOf(firstChatId));
+        Mockito.verify(blogSubService).findById(blogId);
+        Mockito.verify(unparsedBlogService).findById(blogId);
+        unparsedBlog.getUsers().remove(firstTelegramUser);
+        Mockito.verify(unparsedBlogService).save(unparsedBlog);
+        Assertions.assertEquals(unparsedBlog.getUsers().size(), 1);
+        Mockito.verify(sendBotMessageService).sendMessage(firstChatId.toString(), expectedMessage);
     }
 }
