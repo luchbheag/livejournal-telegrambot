@@ -16,7 +16,7 @@ import static java.util.Objects.isNull;
 @Data
 @Entity
 @Table(name = "tg_user")
-@EqualsAndHashCode(exclude = "blogSubs")
+@EqualsAndHashCode(exclude = {"blogSubs", "unparsedBlogs"})
 public class TelegramUser {
     @Id
     @Column(name = "chat_id")
