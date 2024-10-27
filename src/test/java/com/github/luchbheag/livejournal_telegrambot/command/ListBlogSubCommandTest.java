@@ -24,12 +24,14 @@ public class ListBlogSubCommandTest {
     private SendBotMessageService sendBotMessageService;
     private TelegramUserService telegramUserService;
     private UnparsedBlogService unparsedBlogService;
+    private Command command;
 
     @BeforeEach
     public void init() {
         SendBotMessageService sendBotMessageService = Mockito.mock(SendBotMessageService.class);
         TelegramUserService telegramUserService = Mockito.mock(TelegramUserService.class);
         UnparsedBlogService unparsedBlogService = Mockito.mock(UnparsedBlogService.class);
+        Command command = new ListBlogSubCommand(sendBotMessageService, telegramUserService, unparsedBlogService);
     }
 
     @Test
@@ -49,8 +51,6 @@ public class ListBlogSubCommandTest {
 
         Mockito.when(telegramUserService.findByChatId(telegramUser.getChatId()))
                 .thenReturn(Optional.of(telegramUser));
-
-        ListBlogSubCommand command = new ListBlogSubCommand(sendBotMessageService, telegramUserService, unparsedBlogService);
 
         Update update = new Update();
         Message message = Mockito.mock(Message.class);
