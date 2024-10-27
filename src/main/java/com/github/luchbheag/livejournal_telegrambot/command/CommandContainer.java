@@ -31,7 +31,7 @@ public class CommandContainer {
                 .put(NO.getCommandName(), new NoCommand(sendBotMessageService))
                 .put(STAT.getCommandName(), new StatCommand(sendBotMessageService, telegramUserService))
                 .put(ADD_BLOG_SUB.getCommandName(), new AddBlogSubCommand(sendBotMessageService, blogSubService, confirmationInfoService))
-                .put(LIST_BLOG_SUB.getCommandName(), new ListBlogSubCommand(sendBotMessageService, telegramUserService))
+                .put(LIST_BLOG_SUB.getCommandName(), new ListBlogSubCommand(sendBotMessageService, telegramUserService, unparsedBlogService))
                 .put(DELETE_BLOG_SUB.getCommandName(), new DeleteBlogSubCommand(sendBotMessageService, telegramUserService, blogSubService, unparsedBlogService))
                 .put(ADMIN_HELP.getCommandName(), new AdminHelpCommand(sendBotMessageService))
                 .put(CONFIRM.getCommandName(), new ConfirmCommand(sendBotMessageService, unparsedBlogService, confirmationInfoService))

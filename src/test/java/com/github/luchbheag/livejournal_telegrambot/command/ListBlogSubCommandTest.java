@@ -4,6 +4,8 @@ import com.github.luchbheag.livejournal_telegrambot.repository.entity.BlogSub;
 import com.github.luchbheag.livejournal_telegrambot.repository.entity.TelegramUser;
 import com.github.luchbheag.livejournal_telegrambot.service.SendBotMessageService;
 import com.github.luchbheag.livejournal_telegrambot.service.TelegramUserService;
+import com.github.luchbheag.livejournal_telegrambot.service.UnparsedBlogService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -19,6 +21,17 @@ import static com.github.luchbheag.livejournal_telegrambot.command.CommandName.L
 
 @DisplayName("Unit-level testing for ListGroupSubCommand")
 public class ListBlogSubCommandTest {
+    private SendBotMessageService sendBotMessageService;
+    private TelegramUserService telegramUserService;
+    private UnparsedBlogService unparsedBlogService;
+
+    @BeforeEach
+    public void init() {
+        SendBotMessageService sendBotMessageService = Mockito.mock(SendBotMessageService.class);
+        TelegramUserService telegramUserService = Mockito.mock(TelegramUserService.class);
+        UnparsedBlogService unparsedBlogService = Mockito.mock(UnparsedBlogService.class);
+    }
+
     @Test
     public void shouldProperlyShowsListBlogSub() {
         // given
@@ -34,13 +47,10 @@ public class ListBlogSubCommandTest {
 
         telegramUser.setBlogSubs(blogSubList);
 
-        SendBotMessageService sendBotMessageService = Mockito.mock(SendBotMessageService.class);
-        TelegramUserService telegramUserService = Mockito.mock(TelegramUserService.class);
-
         Mockito.when(telegramUserService.findByChatId(telegramUser.getChatId()))
                 .thenReturn(Optional.of(telegramUser));
 
-        ListBlogSubCommand command = new ListBlogSubCommand(sendBotMessageService, telegramUserService);
+        ListBlogSubCommand command = new ListBlogSubCommand(sendBotMessageService, telegramUserService, unparsedBlogService);
 
         Update update = new Update();
         Message message = Mockito.mock(Message.class);
