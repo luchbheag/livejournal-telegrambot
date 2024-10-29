@@ -16,7 +16,7 @@ import static java.util.Objects.isNull;
 @Data
 @Entity
 @Table(name = "tg_user")
-@EqualsAndHashCode(exclude = "blogSubs")
+@EqualsAndHashCode(exclude = {"blogSubs", "unparsedBlogs"})
 public class TelegramUser {
     @Id
     @Column(name = "chat_id")
@@ -28,8 +28,8 @@ public class TelegramUser {
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private List<BlogSub> blogSubs;
 
-//    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
-//    private List<UnparsedBlog> unparsedBlogs;
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    private List<UnparsedBlog> unparsedBlogs;
 
     public void addBlogSub(BlogSub blogSub) {
         if (isNull(blogSubs)) {

@@ -86,6 +86,7 @@ public class DeleteBlogSubCommand implements Command {
     }
 
     private void sendBlogList(String chatId) {
+        // TODO: update
         String message;
         List<BlogSub> blogSubs = telegramUserService.findByChatId(chatId)
                 .orElseThrow(NotFoundException::new)
