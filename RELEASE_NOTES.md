@@ -1,5 +1,10 @@
 # Release Notes
 
+## 1.2.0-SNAPSHOT
+
+* updated /listblogsub command to list unparsed blogs from the waiting list as well
+* updated /deleteblogsub command to remove unparsed blog from the waiting list
+
 ## 1.1.0-SNAPSHOT
 
 * added /addblogsub, /listblogsub, /deleteblogsub commands
